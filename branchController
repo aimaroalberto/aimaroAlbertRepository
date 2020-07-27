@@ -1,0 +1,259 @@
+#!/bin/bash
+print_help() {
+    printf "Usage: branchController [VERSION]\n"
+    printf "\n"
+    printf "    VERSION could be the version of the new release.\n"
+    printf "    Without the VERSION parameter, it will pull the libraries and apps; otherwise it will also update the pom.xml version which will send the release/VERSION branch\n"
+    printf "\n"
+    printf "Usage: branchController -s version\n"
+    printf "    branchController will switch all the apps to the referred release branch (if it exist).\n"
+    printf "Usage: branchController -develop\n"
+    printf "    branchController will switch all the apps to the develop branch\n"
+    printf "Example: pull_manager 1.35\n"
+}
+
+create_new_release_branch(){
+    git branch release/$1
+    git checkout release/$1
+    python /home/sdk/scriptRilascio/changeVersionInPom.py $1
+    git add pom.xml
+    git commit -m "Updated version in pom file"
+    git push --set-upstream origin release/$1
+}
+
+update_libraries(){
+cd /home/sdk/eclipse-workspace/utility_lib/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/ipc_library/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/sdp_client_library/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/secure_storage_lib/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/configuration_lib/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/call_manager_library/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/drm_parsing_lib/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/in_vehicle_messaging_library/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_lib/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/aota_lib/
+    git checkout develop
+    git pull
+}
+
+switch_to_release_branch(){
+cd /home/sdk/eclipse-workspace/telematics_client/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/ipc_daemon/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/in_vehicle_messaging_daemon/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/in_vehicle_messaging_app/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/in_vehicle_activation_daemon/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/in_vehicle_activation_app/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/assist/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/aota_daemon/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/eco_coaching/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_daemon/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_app/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/nav_auth_daemon/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/off_road_pages/
+    git checkout release/$1
+cd /home/sdk/eclipse-workspace/call_manager/
+    git checkout release/$1
+}
+
+create_new_release_branch_for_all_apps(){
+cd /home/sdk/eclipse-workspace/telematics_client/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/ipc_daemon/
+    create_new_release_branch $1 
+cd /home/sdk/eclipse-workspace/in_vehicle_messaging_daemon/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/in_vehicle_messaging_app/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/in_vehicle_activation_daemon/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/in_vehicle_activation_app/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/assist/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/aota_daemon/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/eco_coaching/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_daemon/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_app/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/nav_auth_daemon/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/off_road_pages/
+    create_new_release_branch $1
+cd /home/sdk/eclipse-workspace/call_manager/
+    create_new_release_branch $1
+}
+
+switch_to_develop(){
+cd /home/sdk/eclipse-workspace/telematics_client/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/ipc_daemon/
+    git checkout develop
+    git pull 
+cd /home/sdk/eclipse-workspace/in_vehicle_messaging_daemon/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/in_vehicle_messaging_app/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/in_vehicle_activation_daemon/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/in_vehicle_activation_app/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/assist/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/aota_daemon/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/eco_coaching/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_daemon/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_app/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/nav_auth_daemon/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/off_road_pages/
+    git checkout develop
+    git pull
+cd /home/sdk/eclipse-workspace/call_manager/
+    git checkout develop
+    git pull
+}
+
+allign_develop(){
+cd /home/sdk/eclipse-workspace/telematics_client/
+    git checkout develop
+    git merge origin/release/$1
+    git push --set-upstream origin
+# cd /home/sdk/eclipse-workspace/ipc_daemon/
+    # git checkout develop
+    # git pull 
+# cd /home/sdk/eclipse-workspace/in_vehicle_messaging_daemon/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/in_vehicle_messaging_app/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/in_vehicle_activation_daemon/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/in_vehicle_activation_app/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/assist/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/aota_daemon/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/eco_coaching/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_daemon/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/send_dest_to_vehicle_app/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/nav_auth_daemon/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/off_road_pages/
+    # git checkout develop
+    # git pull
+# cd /home/sdk/eclipse-workspace/call_manager/
+    # git checkout develop
+    # git pull
+}
+
+check_input() {
+    if [ "$1" = "--help" ] || [ "$1" = "-h" ]||[ -z "$1" ]; then
+        print_help
+        exit 0
+    fi
+
+    if [ ! -z "$1" ]; then
+        
+        if [ "$1" = "-s" ]; then
+                switch_to_release_branch $2
+                exit 0
+        fi
+
+        if [ "$1" = "-develop" ]; then
+                switch_to_develop
+                exit 0
+        fi
+        
+        if [ "$1" = "-alligndevelop" ]; then
+                if [ -z "$2"]; then
+                        echo "Input for version must be a number in form <xx>.<yy>" 
+                        exit 0
+                fi
+                allign_develop $2
+                exit 0
+        fi
+
+        if ! [[ "$1" =~ ^[+-]?[0-9]+\.?[0-9]*$ ]] 
+        then 
+                echo "Input for version must be a number in form <xx>.<yy>" 
+                exit 0 
+        else
+            if  [[ "$1" =~ ^[+-]?[0-9]{3}+\.?[0-9]*$ ]] || [[ "$1" =~ ^[+-]?[0-9]+\.?[0-9]{3}*$ ]]
+            then 
+                    echo "Input for version must be a number in form <xx>.<yy>" 
+                    exit 0 
+            else    
+                update_libraries
+                switch_to_develop
+                create_new_release_branch_for_all_apps $1
+            fi
+        fi
+    fi
+}
+# Main execution
+git config --global credential.helper
+check_input $1 $2
+
+
+
